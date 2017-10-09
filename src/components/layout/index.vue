@@ -13,9 +13,6 @@
     <Row class="layout-content">
         <slot name="layout-content-main"></slot>
     </Row>
-    <!-- <Row class="layout-copy">
-        &copy; NIO 2017
-    </Row> -->
     </Col>
 </Row>
 </template>
