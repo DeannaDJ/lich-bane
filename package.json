@@ -1,18 +1,18 @@
 {
     "name": "lichBane",
-    "version": "0.0.0",
-    "private": true,
+    "version": "0.0.1",
+    "private": false,
     "scripts": {
         "build": "gulp build"
     },
     "main": "dist/lichBane.js",
     "files": [
-      "dist",
-      "src"
+        "dist",
+        "src"
     ],
     "repository": {
-      "type": "git",
-      "url": "https://github.com/DeannaDJ/lich-bane.git"
+        "type": "git",
+        "url": "https://github.com/DeannaDJ/lich-bane.git"
     },
     "author": "DeannaDJ",
     "dependencies": {},
