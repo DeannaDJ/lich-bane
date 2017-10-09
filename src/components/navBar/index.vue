@@ -1,51 +1,43 @@
 <template>
 <Row>
-    <Col span="4">
     <div class="layout-logo">
-        <a class="navbar-brand" href="javascript:void(0);">demo</a>
+        <Icon type="home" size=30 color="#fff"></Icon>
+        <a class="navbar-brand" href="javascript:void(0);">运营门户</a>
     </div>
-    </Col>
-    <Col span="20" offset="4">
-    <Menu mode="horizontal" theme="dark" :active-name="activeName" @on-select="selectItem" style="height: 49px;">
-        <div class="layout-nav">
-            <Menu-item v-for="item in leftNav" v-if="item.show" :key="item.url" :name="item.url">{{item.displayName}}</Menu-item>
+    <Menu class="layout-menu" mode="horizontal" theme="dark" :active-name="activeName" @on-select="selectItem" style="height: 49px;">
+        <div class="layout-nav" v-if="leftNav">
+            <Menu-item v-for="(item, key) in leftNav" v-if="item.show" :key="key" :name="key">{{item.displayName}}</Menu-item>
         </div>
-        <div class="navbar-right">
-            <Menu-item v-for="item in rightNav" v-if="item.show" :key="item.url" :name="item.url">{{item.displayName}}</Menu-item>
-            <Menu-item key="profile" name="profile">
-                {{user.name || user.email || user.mobile}}
-            </Menu-item>
-            <Menu-item key="logout" name="logout">
-                <Badge>
-                    <Icon type="log-out" size=24></Icon>
+        <div class="navbar-right" v-if="rightNav">
+            <Menu-item v-for="(item, key) in rightNav" v-if="item.show" :key="key" :name="key">
+                <Badge v-if="item.icon" :count="item.count">
+                    <span class="nav-bar-icon">
+                        <Icon :type="item.icon" size=24></Icon>
+                    </span>
                 </Badge>
+                <span v-if="item.displayName">{{item.displayName}}</span>
             </Menu-item>
         </div>
     </Menu>
-    </Col>
 </Row>
 </template>
 
 <script>
 import {
-    navList
+    props
 } from './config';
 
 export default {
-    props: ['user'],
+    props,
     data: function() {
         return {
-            activeName: '/test',
-            leftNav: navList.left,
-            rightNav: navList.right,
-            warningCount: 0
+            activeName: '/'
         }
     },
     mounted() {
         let vm = this;
         // 数据初始化
         vm.initData();
-        vm.onFetchWarningCount();
 
         G.vueHub.$on('onChangeNavBarPath', () => {
             setTimeout(() => {
@@ -73,7 +65,7 @@ export default {
 
         // 登出
         logout() {
-            window.location.href = "/";
+            window.location.href = "/account/logout/";
         }
     }
 }
@@ -83,19 +75,27 @@ export default {
 $navbarHeight: 49px;
 
 .layout-logo {
-    position: absolute;
-    width: 100%;
+    float: left;
+    width: 200px;
     height: $navbarHeight;
     line-height: $navbarHeight;
-    left: 0;
     text-align: center;
     background: #313540;
+    z-index: 1;
+
+    .ivu-icon {
+        vertical-align: sub;
+        margin-right: 5px;
+    }
 
     .navbar-brand {
         font-size: 18px;
         color: #fff;
         font-weight: bold;
     }
+}
+.layout-menu {
+    margin-left: 200px;
 }
 .layout-nav {
     float: left;
@@ -139,7 +139,7 @@ $navbarHeight: 49px;
     background: #f5f7f9;
 }
 
-.warn-icon {
+.nav-bar-icon {
     display: inline-block;
     padding: 0 5px;
 }

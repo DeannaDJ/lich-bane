@@ -8,7 +8,3 @@ export let props = {
         default: []
     }
 };
-
-export const NAMES = {
-  "/": "首页"
-};

@@ -2,20 +2,20 @@
 <template>
 <Row>
     <Col class="layout-menu-left">
-        <SideBar :side-bar-list="sideBarList" :open-items="openItems"></SideBar>
+    <SideBar :side-bar-list="sideBarList" :open-items="openItems"></SideBar>
     </Col>
     <Col class="layout-container">
-        <Row class="layout-breadcrumb">
-            <Breadcrumb v-model="path">
-                <Breadcrumb-item v-for="item in paths" :key="item.fullpath" :href="item.fullpath">{{item.name}}</Breadcrumb-item>
-            </Breadcrumb>
-        </Row>
-        <Row class="layout-content">
-            <slot name="layout-content-main"></slot>
-        </Row>
-        <Row class="layout-copy">
-            &copy; NIO 2017
-        </Row>
+    <Row class="layout-breadcrumb">
+        <Breadcrumb v-model="path">
+            <Breadcrumb-item v-for="item in paths" :key="item.fullpath" :href="item.fullpath">{{item.name}}</Breadcrumb-item>
+        </Breadcrumb>
+    </Row>
+    <Row class="layout-content">
+        <slot name="layout-content-main"></slot>
+    </Row>
+    <!-- <Row class="layout-copy">
+        &copy; NIO 2017
+    </Row> -->
     </Col>
 </Row>
 </template>
@@ -23,8 +23,7 @@
 import SideBar from '../sideBar/index.vue';
 
 import {
-    props,
-    NAMES
+    props
 } from './config'
 
 export default {
@@ -53,7 +52,7 @@ export default {
                 }
                 fullpath += item;
 
-                let name = NAMES[fullpath];
+                let name = (URI_NAMES || {})[fullpath];
                 // 未自定义bread名称的情况
                 if (!name) {
                     this.$router.push('/');

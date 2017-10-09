@@ -41370,7 +41370,7 @@ if (false) {(function () {
                 }
                 fullpath += item;
 
-                let name = __WEBPACK_IMPORTED_MODULE_1__config__["NAMES"][fullpath];
+                let name = (URI_NAMES || {})[fullpath];
                 // 未自定义bread名称的情况
                 if (!name) {
                     this.$router.push('/');
@@ -41448,28 +41448,20 @@ if (false) {(function () {
 //
 //
 //
-//
-//
-//
-//
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-    props: ['user'],
+    props: __WEBPACK_IMPORTED_MODULE_0__config__["props"],
     data: function () {
         return {
-            activeName: '/test',
-            leftNav: __WEBPACK_IMPORTED_MODULE_0__config__["navList"].left,
-            rightNav: __WEBPACK_IMPORTED_MODULE_0__config__["navList"].right,
-            warningCount: 0
+            activeName: '/'
         };
     },
     mounted() {
         let vm = this;
         // 数据初始化
         vm.initData();
-        vm.onFetchWarningCount();
 
         G.vueHub.$on('onChangeNavBarPath', () => {
             setTimeout(() => {
@@ -41495,7 +41487,7 @@ if (false) {(function () {
 
         // 登出
         logout() {
-            window.location.href = "/";
+            window.location.href = "/account/logout/";
         }
     }
 });
@@ -41750,10 +41742,6 @@ var props = exports.props = {
     }
 };
 
-var NAMES = exports.NAMES = {
-    "/": "首页"
-};
-
 /***/ }),
 /* 23 */
 /***/ (function(module, exports, __webpack_require__) {
@@ -41786,14 +41774,16 @@ var props = exports.props = {
 Object.defineProperty(exports, "__esModule", {
     value: true
 });
-var navList = exports.navList = {
-    left: [{
-        url: '/test',
-        displayName: '测试',
-        show: true
-    }],
+var props = exports.props = {
+    leftNav: {
+        type: Object,
+        default: {}
+    },
 
-    right: []
+    rightNav: {
+        type: Object,
+        default: {}
+    }
 };
 
 /***/ }),
@@ -42092,7 +42082,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 window.Vue = window.Vue || _vue2.default;
 window.iView = window.iView || _iview2.default;
-var lichBane = {
+var razor = {
     Layout: _index2.default,
     NavBar: _index4.default,
     Loading: _index6.default,
@@ -42105,11 +42095,11 @@ var lichBane = {
 var install = function install(Vue) {
     var opts = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : {};
 
-    Object.keys(lichBane).forEach(function (key) {
-        Vue.component(key, lichBane[key]);
+    Object.keys(razor).forEach(function (key) {
+        Vue.component(key, razor[key]);
     });
     Vue.prototype.$SpinLoading = _spinLoading2.default;
-    Vue.use(Object.assign(_iview2.default, lichBane));
+    Vue.use(Object.assign(_iview2.default, razor));
 };
 
 // auto install
@@ -42117,7 +42107,7 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
 
-module.exports = Object.assign(lichBane, { install: install }); // lichBane组件
+module.exports = Object.assign(razor, { install: install }); // razor组件
 
 /***/ }),
 /* 30 */
@@ -42225,7 +42215,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.layout-logo[data-v-21eba716] {\n  position: absolute;\n  width: 100%;\n  height: 49px;\n  line-height: 49px;\n  left: 0;\n  text-align: center;\n  background: #313540;\n}\n.layout-logo .navbar-brand[data-v-21eba716] {\n    font-size: 18px;\n    color: #fff;\n    font-weight: bold;\n}\n.layout-nav[data-v-21eba716] {\n  float: left;\n  height: inherit;\n  font-weight: bold;\n  font-size: 16px;\n}\n.navbar-right[data-v-21eba716] {\n  float: right;\n  font-weight: bold;\n  font-size: 16px;\n}\n.ivu-menu-item[data-v-21eba716] {\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  height: 49px;\n}\n.ivu-menu-item.ivu-menu-item-active[data-v-21eba716], .ivu-menu-item[data-v-21eba716]:hover {\n    background: #080808;\n}\n.header-user-item[data-v-21eba716] {\n  max-width: 100px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  padding: 0 18px;\n  display: inline-block;\n  vertical-align: middle;\n  color: #555;\n  border-left: 1px solid #eee;\n}\n.header-user-item[data-v-21eba716]:hover {\n  background: #f5f7f9;\n}\n.warn-icon[data-v-21eba716] {\n  display: inline-block;\n  padding: 0 5px;\n}\n", ""]);
+exports.push([module.i, "\n.layout-logo[data-v-21eba716] {\n  float: left;\n  width: 200px;\n  height: 49px;\n  line-height: 49px;\n  text-align: center;\n  background: #313540;\n  z-index: 1;\n}\n.layout-logo .ivu-icon[data-v-21eba716] {\n    vertical-align: sub;\n    margin-right: 5px;\n}\n.layout-logo .navbar-brand[data-v-21eba716] {\n    font-size: 18px;\n    color: #fff;\n    font-weight: bold;\n}\n.layout-menu[data-v-21eba716] {\n  margin-left: 200px;\n}\n.layout-nav[data-v-21eba716] {\n  float: left;\n  height: inherit;\n  font-weight: bold;\n  font-size: 16px;\n}\n.navbar-right[data-v-21eba716] {\n  float: right;\n  font-weight: bold;\n  font-size: 16px;\n}\n.ivu-menu-item[data-v-21eba716] {\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  height: 49px;\n}\n.ivu-menu-item.ivu-menu-item-active[data-v-21eba716], .ivu-menu-item[data-v-21eba716]:hover {\n    background: #080808;\n}\n.header-user-item[data-v-21eba716] {\n  max-width: 100px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  padding: 0 18px;\n  display: inline-block;\n  vertical-align: middle;\n  color: #555;\n  border-left: 1px solid #eee;\n}\n.header-user-item[data-v-21eba716]:hover {\n  background: #f5f7f9;\n}\n.nav-bar-icon[data-v-21eba716] {\n  display: inline-block;\n  padding: 0 5px;\n}\n", ""]);
 
 // exports
 
@@ -42295,7 +42285,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n@keyframes ani-spin-data-v-a3bd65a6 {\nfrom {\n    transform: rotate(0deg);\n}\n50% {\n    transform: rotate(180deg);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n.spin-load[data-v-a3bd65a6] {\n  width: 100%;\n  height: 500px;\n}\n.spin-load .icon[data-v-a3bd65a6] {\n    animation: ani-spin-data-v-a3bd65a6 0.7s linear infinite;\n}\n.ivu-spin-fix[data-v-a3bd65a6] {\n  position: fixed;\n  top: 49px;\n  left: 0;\n  background: transparent;\n}\n.ivu-spin-fix .shade[data-v-a3bd65a6] {\n    position: fixed;\n    top: 0;\n    left: 0;\n    background: #000;\n    opacity: 0.5;\n    width: 100%;\n    height: 100%;\n}\n.ivu-spin-fix .show-text[data-v-a3bd65a6] {\n    color: #fff;\n    opacity: 0.99;\n}\n", ""]);
+exports.push([module.i, "\n@keyframes ani-spin-data-v-a3bd65a6 {\nfrom {\n    transform: rotate(0deg);\n}\n50% {\n    transform: rotate(180deg);\n}\nto {\n    transform: rotate(360deg);\n}\n}\n.spin-load[data-v-a3bd65a6] {\n  width: 100%;\n  height: 500px;\n}\n.spin-load .icon[data-v-a3bd65a6] {\n    animation: ani-spin-data-v-a3bd65a6 0.7s linear infinite;\n}\n.ivu-spin-fix[data-v-a3bd65a6] {\n  position: fixed;\n  top: 49px;\n  left: 0;\n  background: transparent;\n  z-index: 9999;\n}\n.ivu-spin-fix .shade[data-v-a3bd65a6] {\n    position: fixed;\n    top: 0;\n    left: 0;\n    background: #000;\n    opacity: 0.5;\n    width: 100%;\n    height: 100%;\n}\n.ivu-spin-fix .show-text[data-v-a3bd65a6] {\n    color: #fff;\n    opacity: 0.99;\n}\n", ""]);
 
 // exports
 
@@ -42720,23 +42710,21 @@ if (false) {(function () {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('Row', [_c('Col', {
-    attrs: {
-      "span": "4"
-    }
-  }, [_c('div', {
+  return _c('Row', [_c('div', {
     staticClass: "layout-logo"
-  }, [_c('a', {
+  }, [_c('Icon', {
+    attrs: {
+      "type": "home",
+      "size": "30",
+      "color": "#fff"
+    }
+  }), _vm._v(" "), _c('a', {
     staticClass: "navbar-brand",
     attrs: {
       "href": "javascript:void(0);"
     }
-  }, [_vm._v("demo")])])]), _vm._v(" "), _c('Col', {
-    attrs: {
-      "span": "20",
-      "offset": "4"
-    }
-  }, [_c('Menu', {
+  }, [_vm._v("运营门户")])], 1), _vm._v(" "), _c('Menu', {
+    staticClass: "layout-menu",
     staticStyle: {
       "height": "49px"
     },
@@ -42748,40 +42736,36 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     on: {
       "on-select": _vm.selectItem
     }
-  }, [_c('div', {
+  }, [(_vm.leftNav) ? _c('div', {
     staticClass: "layout-nav"
-  }, _vm._l((_vm.leftNav), function(item) {
+  }, _vm._l((_vm.leftNav), function(item, key) {
     return (item.show) ? _c('Menu-item', {
-      key: item.url,
+      key: key,
       attrs: {
-        "name": item.url
+        "name": key
       }
     }, [_vm._v(_vm._s(item.displayName))]) : _vm._e()
-  })), _vm._v(" "), _c('div', {
+  })) : _vm._e(), _vm._v(" "), (_vm.rightNav) ? _c('div', {
     staticClass: "navbar-right"
-  }, [_vm._l((_vm.rightNav), function(item) {
+  }, _vm._l((_vm.rightNav), function(item, key) {
     return (item.show) ? _c('Menu-item', {
-      key: item.url,
+      key: key,
       attrs: {
-        "name": item.url
+        "name": key
       }
-    }, [_vm._v(_vm._s(item.displayName))]) : _vm._e()
-  }), _vm._v(" "), _c('Menu-item', {
-    key: "profile",
-    attrs: {
-      "name": "profile"
-    }
-  }, [_vm._v("\n                " + _vm._s(_vm.user.name || _vm.user.email || _vm.user.mobile) + "\n            ")]), _vm._v(" "), _c('Menu-item', {
-    key: "logout",
-    attrs: {
-      "name": "logout"
-    }
-  }, [_c('Badge', [_c('Icon', {
-    attrs: {
-      "type": "log-out",
-      "size": "24"
-    }
-  })], 1)], 1)], 2)])], 1)], 1)
+    }, [(item.icon) ? _c('Badge', {
+      attrs: {
+        "count": item.count
+      }
+    }, [_c('span', {
+      staticClass: "nav-bar-icon"
+    }, [_c('Icon', {
+      attrs: {
+        "type": item.icon,
+        "size": "24"
+      }
+    })], 1)]) : _vm._e(), _vm._v(" "), (item.displayName) ? _c('span', [_vm._v(_vm._s(item.displayName))]) : _vm._e()], 1) : _vm._e()
+  })) : _vm._e()])], 1)
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -42979,6 +42963,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "placeholder": _vm.startPlaceholder
     },
     on: {
+      "on-clear": _vm.onChangeStart,
       "on-change": _vm.onChangeStart
     }
   }), _vm._v(" "), _c('label', {
@@ -42992,6 +42977,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "placeholder": _vm.endPlaceholder
     },
     on: {
+      "on-clear": _vm.onChangeEnd,
       "on-change": _vm.onChangeEnd
     }
   })], 1)
@@ -43111,9 +43097,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }, [_vm._v(_vm._s(item.name))])
   }))], 1), _vm._v(" "), _c('Row', {
     staticClass: "layout-content"
-  }, [_vm._t("layout-content-main")], 2), _vm._v(" "), _c('Row', {
-    staticClass: "layout-copy"
-  }, [_vm._v("\n            © NIO 2017\n        ")])], 1)], 1)
+  }, [_vm._t("layout-content-main")], 2)], 1)], 1)
 }
 var staticRenderFns = []
 render._withStripped = true

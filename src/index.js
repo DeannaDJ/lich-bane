@@ -12,7 +12,7 @@ import SpinLoading from './components/spinLoading/spin-loading.js';
 
 window.Vue = window.Vue || Vue;
 window.iView = window.iView || iView;
-const lichBane = {
+const razor = {
     Layout,
     NavBar,
     Loading,
@@ -23,11 +23,11 @@ const lichBane = {
 };
 
 const install = function (Vue, opts = {}) {
-    Object.keys(lichBane).forEach((key) => {
-        Vue.component(key, lichBane[key]);
+    Object.keys(razor).forEach((key) => {
+        Vue.component(key, razor[key]);
     });
     Vue.prototype.$SpinLoading = SpinLoading;
-    Vue.use(Object.assign(iView, lichBane));
+    Vue.use(Object.assign(iView, razor));
 };
 
 // auto install
@@ -35,4 +35,4 @@ if (typeof window !== 'undefined' && window.Vue) {
     install(window.Vue);
 }
 
-module.exports = Object.assign(lichBane, {install});   // lichBane组件
+module.exports = Object.assign(razor, {install});   // razor组件

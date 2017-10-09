@@ -1,9 +1,9 @@
 <template>
 <div class="date-time">
     <label class="label-text">开始时间</label>
-    <DatePicker type="datetime" :value="startTime" :format="format" :placeholder="startPlaceholder" class="pe-w200" @on-change="onChangeStart"></DatePicker>
+    <DatePicker type="datetime" :value="startTime" :format="format" :placeholder="startPlaceholder" class="pe-w200" @on-clear="onChangeStart" @on-change="onChangeStart"></DatePicker>
     <label class="label-text">结束时间</label>
-    <DatePicker type="datetime" :value="endTime" :format="format" :placeholder="endPlaceholder" class="pe-w200" @on-change="onChangeEnd"></DatePicker>
+    <DatePicker type="datetime" :value="endTime" :format="format" :placeholder="endPlaceholder" class="pe-w200" @on-clear="onChangeEnd" @on-change="onChangeEnd"></DatePicker>
 </div>
 </template>
 

@@ -1,9 +1,11 @@
-export let navList = {
-    left: [{
-        url: '/test',
-        displayName: '测试',
-        show: true
-    }],
+export let props = {
+    leftNav: {
+        type: Object,
+        default: {}
+    },
 
-    right: []
+    rightNav: {
+        type: Object,
+        default: {}
+    }
 }

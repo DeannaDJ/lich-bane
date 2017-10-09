@@ -1,9 +1,9 @@
 <template>
-    <Spin size="large" fix v-if="loading" class="spin-load">
-        <div class="shade"></div>
-        <Icon type="load-a" size=40  class="icon"></Icon>
-        <div class="show-text">{{showText}}</div>
-    </Spin>
+<Spin size="large" fix v-if="loading" class="spin-load">
+    <div class="shade"></div>
+    <Icon type="load-a" size=40 class="icon"></Icon>
+    <div class="show-text">{{showText}}</div>
+</Spin>
 </template>
 
 <script>
@@ -17,9 +17,15 @@ export default {
 </script>
 <style lang="scss" scoped="true" type="text/css">
 @keyframes ani-spin {
-    from { transform: rotate(0deg);}
-    50%  { transform: rotate(180deg);}
-    to   { transform: rotate(360deg);}
+    from {
+        transform: rotate(0deg);
+    }
+    50% {
+        transform: rotate(180deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
 
 .spin-load {
@@ -35,6 +41,7 @@ export default {
     top: 49px;
     left: 0;
     background: transparent;
+    z-index: 9999;
     .shade {
         position: fixed;
         top: 0;
@@ -49,5 +56,4 @@ export default {
         opacity: 0.99;
     }
 }
-
 </style>
