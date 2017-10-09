@@ -54,18 +54,20 @@ export default {
 
         // 选择item
         selectItem(name) {
-            if (name == 'logout') {
-                this.logout();
-            } else if (name == 'profile') {
-
-            } else {
-                this.$router.push(name);
+            if (name == 'profile') {
+                return;
             }
-        },
 
-        // 登出
-        logout() {
-            window.location.href = "/account/logout/";
+            if(this.leftNav[name] && this.leftNav[name].url) {
+                window.location.href = this.leftNav[name].url;
+                return;
+            }
+            if(this.rightNav[name] && this.rightNav[name].url) {
+                window.location.href = this.rightNav[name].url;
+                return;
+            }
+
+            this.$router.push(name);
         }
     }
 }
