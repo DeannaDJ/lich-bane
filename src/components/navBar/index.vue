@@ -1,5 +1,5 @@
 <template>
-<Row>
+<Row class="pe-header">
     <div class="layout-logo">
         <Icon type="home" size=30 color="#fff"></Icon>
         <a class="navbar-brand" href="javascript:void(0);">运营门户</a>
@@ -49,24 +49,39 @@ export default {
     methods: {
         initData() {
             // 初始化激活状态
-            this.activeName = '/' + this.$route.path.split('/')[1];
+            let paths = this.$route.path.split('/');
+            this.activeName = '/' + paths[1];
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
         },
 
         // 选择item
         selectItem(name) {
+            G.vueHub.$emit('navActiveKey', name);
+            this.activeName = name;
             if (name == 'profile') {
                 return;
             }
 
-            if(this.leftNav[name] && this.leftNav[name].url) {
+            if (this.leftNav[name] && this.leftNav[name].url) {
                 window.location.href = this.leftNav[name].url;
                 return;
             }
-            if(this.rightNav[name] && this.rightNav[name].url) {
+            if (this.rightNav[name] && this.rightNav[name].url) {
                 window.location.href = this.rightNav[name].url;
                 return;
             }
+            localStorage.setItem('navActiveKey', name);
 
+            let paths = name.split('/');
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
             this.$router.push(name);
         }
     }
@@ -75,6 +90,15 @@ export default {
 
 <style lang="scss" scoped="true" type="text/css">
 $navbarHeight: 49px;
+
+.pe-header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 100;
+    min-width: 1200px;
+}
 
 .layout-logo {
     float: left;
@@ -112,11 +136,6 @@ $navbarHeight: 49px;
 }
 
 .ivu-menu-item {
-    max-width: 120px;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-
     line-height: $navbarHeight;
     height: $navbarHeight;
     &.ivu-menu-item-active,

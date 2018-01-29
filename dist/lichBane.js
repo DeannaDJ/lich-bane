@@ -41280,6 +41280,8 @@ if (false) {(function () {
     methods: {
         initData() {
             if (!this.rangeDate || this.rangeDate && this.rangeDate.length < 2) {
+                this.startTime = null;
+                this.endTime = null;
                 return;
             }
 
@@ -41336,9 +41338,6 @@ if (false) {(function () {
 //
 //
 //
-//
-//
-//
 
 
 
@@ -41373,8 +41372,8 @@ if (false) {(function () {
                 let name = (URI_NAMES || {})[fullpath];
                 // 未自定义bread名称的情况
                 if (!name) {
-                    this.$router.push('/');
-                    return;
+                    name = item;
+                    fullpath = path;
                 }
                 return {
                     fullpath: fullpath,
@@ -41390,6 +41389,20 @@ if (false) {(function () {
             this.path = to.path;
             next();
         });
+    },
+
+    watch: {
+        path(val) {
+            if (!val) {
+                return;
+            }
+            let paths = val.split('/');
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
+        }
     },
 
     methods: {}
@@ -41473,21 +41486,40 @@ if (false) {(function () {
     methods: {
         initData() {
             // 初始化激活状态
-            this.activeName = '/' + this.$route.path.split('/')[1];
+            let paths = this.$route.path.split('/');
+            this.activeName = '/' + paths[1];
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
         },
 
         // 选择item
         selectItem(name) {
-            if (name == 'logout') {
-                this.logout();
-            } else if (name == 'profile') {} else {
-                this.$router.push(name);
+            G.vueHub.$emit('navActiveKey', name);
+            this.activeName = name;
+            if (name == 'profile') {
+                return;
             }
-        },
 
-        // 登出
-        logout() {
-            window.location.href = "/account/logout/";
+            if (this.leftNav[name] && this.leftNav[name].url) {
+                window.location.href = this.leftNav[name].url;
+                return;
+            }
+            if (this.rightNav[name] && this.rightNav[name].url) {
+                window.location.href = this.rightNav[name].url;
+                return;
+            }
+            localStorage.setItem('navActiveKey', name);
+
+            let paths = name.split('/');
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
+            this.$router.push(name);
         }
     }
 });
@@ -41517,6 +41549,8 @@ if (false) {(function () {
 //
 //
 //
+//
+//
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
@@ -41527,13 +41561,32 @@ if (false) {(function () {
         };
     },
     mounted() {
+        let vm = this;
         // 初始化数据
         this.initData();
+        G.vueHub.$on('onChangeNavBarPath', () => {
+            setTimeout(() => {
+                vm.initData();
+            }, 500);
+        });
     },
+
     methods: {
+        isExsitBar(list) {
+            let name = '';
+            for (let item of list) {
+                if (item.subItem && item.subItem.length) {
+                    name = this.isExsitBar(item.subItem) || name;
+                } else if (this.$route.path.indexOf(item.url) > -1) {
+                    name = item.url;
+                }
+            }
+            return name;
+        },
+
         initData() {
             // 初始化激活状态
-            this.activeName = this.$route.path;
+            this.activeName = this.isExsitBar(this.sideBarList);
         },
 
         selectItem(name) {
@@ -41709,6 +41762,14 @@ var props = exports.props = {
         type: Array,
         default: null
     },
+    startLabel: {
+        type: String,
+        default: '开始时间'
+    },
+    endLabel: {
+        type: String,
+        default: '结束时间'
+    },
 
     startPlaceholder: {
         type: String,
@@ -41732,6 +41793,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var props = exports.props = {
+    theme: {
+        type: String,
+        default: 'light'
+    },
     openItems: {
         type: Array,
         default: []
@@ -41797,6 +41862,10 @@ Object.defineProperty(exports, "__esModule", {
     value: true
 });
 var props = exports.props = {
+    theme: {
+        type: String,
+        default: "light"
+    },
     openItems: {
         type: Array,
         default: []
@@ -42215,7 +42284,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.layout-logo[data-v-21eba716] {\n  float: left;\n  width: 200px;\n  height: 49px;\n  line-height: 49px;\n  text-align: center;\n  background: #313540;\n  z-index: 1;\n}\n.layout-logo .ivu-icon[data-v-21eba716] {\n    vertical-align: sub;\n    margin-right: 5px;\n}\n.layout-logo .navbar-brand[data-v-21eba716] {\n    font-size: 18px;\n    color: #fff;\n    font-weight: bold;\n}\n.layout-menu[data-v-21eba716] {\n  margin-left: 200px;\n}\n.layout-nav[data-v-21eba716] {\n  float: left;\n  height: inherit;\n  font-weight: bold;\n  font-size: 16px;\n}\n.navbar-right[data-v-21eba716] {\n  float: right;\n  font-weight: bold;\n  font-size: 16px;\n}\n.ivu-menu-item[data-v-21eba716] {\n  max-width: 120px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  height: 49px;\n}\n.ivu-menu-item.ivu-menu-item-active[data-v-21eba716], .ivu-menu-item[data-v-21eba716]:hover {\n    background: #080808;\n}\n.header-user-item[data-v-21eba716] {\n  max-width: 100px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  padding: 0 18px;\n  display: inline-block;\n  vertical-align: middle;\n  color: #555;\n  border-left: 1px solid #eee;\n}\n.header-user-item[data-v-21eba716]:hover {\n  background: #f5f7f9;\n}\n.nav-bar-icon[data-v-21eba716] {\n  display: inline-block;\n  padding: 0 5px;\n}\n", ""]);
+exports.push([module.i, "\n.pe-header[data-v-21eba716] {\n  position: fixed;\n  top: 0;\n  left: 0;\n  width: 100%;\n  z-index: 100;\n  min-width: 1200px;\n}\n.layout-logo[data-v-21eba716] {\n  float: left;\n  width: 200px;\n  height: 49px;\n  line-height: 49px;\n  text-align: center;\n  background: #313540;\n  z-index: 1;\n}\n.layout-logo .ivu-icon[data-v-21eba716] {\n    vertical-align: sub;\n    margin-right: 5px;\n}\n.layout-logo .navbar-brand[data-v-21eba716] {\n    font-size: 18px;\n    color: #fff;\n    font-weight: bold;\n}\n.layout-menu[data-v-21eba716] {\n  margin-left: 200px;\n}\n.layout-nav[data-v-21eba716] {\n  float: left;\n  height: inherit;\n  font-weight: bold;\n  font-size: 16px;\n}\n.navbar-right[data-v-21eba716] {\n  float: right;\n  font-weight: bold;\n  font-size: 16px;\n}\n.ivu-menu-item[data-v-21eba716] {\n  line-height: 49px;\n  height: 49px;\n}\n.ivu-menu-item.ivu-menu-item-active[data-v-21eba716], .ivu-menu-item[data-v-21eba716]:hover {\n    background: #080808;\n}\n.header-user-item[data-v-21eba716] {\n  max-width: 100px;\n  overflow: hidden;\n  text-overflow: ellipsis;\n  white-space: nowrap;\n  line-height: 49px;\n  padding: 0 18px;\n  display: inline-block;\n  vertical-align: middle;\n  color: #555;\n  border-left: 1px solid #eee;\n}\n.header-user-item[data-v-21eba716]:hover {\n  background: #f5f7f9;\n}\n.nav-bar-icon[data-v-21eba716] {\n  display: inline-block;\n  padding: 0 5px;\n}\n", ""]);
 
 // exports
 
@@ -42299,7 +42368,7 @@ exports = module.exports = __webpack_require__(1)(undefined);
 
 
 // module
-exports.push([module.i, "\n.layout-menu-left[data-v-fb9b79a2] {\n  position: fixed;\n  width: 200px;\n  height: 100%;\n  overflow-y: auto;\n  box-shadow: 2px 0 4px #f2f2f2;\n  z-index: 1;\n}\n.layout-container[data-v-fb9b79a2] {\n  position: fixed;\n  width: 100%;\n  height: 100%;\n  padding: 15px 15px 15px 215px;\n  overflow-y: auto;\n}\n.layout-container .layout-content[data-v-fb9b79a2] {\n    padding: 10px;\n}\n.layout-breadcrumb[data-v-fb9b79a2] {\n  padding: 5px 10px;\n}\n.layout-copy[data-v-fb9b79a2] {\n  margin: 10px;\n  text-align: center;\n}\n", ""]);
+exports.push([module.i, "\n.layout-menu-left[data-v-fb9b79a2] {\n  position: fixed;\n  top: 50px;\n  left: 0;\n  width: 200px;\n  height: 100%;\n  overflow-y: auto;\n  box-shadow: 2px 0 4px #f2f2f2;\n  z-index: 1;\n}\n.layout-container[data-v-fb9b79a2] {\n  position: relative;\n  width: 100%;\n  height: 100%;\n  padding: 65px 15px 15px 215px;\n  overflow-y: auto;\n}\n.layout-container .layout-content[data-v-fb9b79a2] {\n    padding: 10px;\n}\n.layout-breadcrumb[data-v-fb9b79a2] {\n  padding: 5px 10px;\n}\n.layout-copy[data-v-fb9b79a2] {\n  margin: 10px;\n  text-align: center;\n}\n", ""]);
 
 // exports
 
@@ -42710,7 +42779,9 @@ if (false) {(function () {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('Row', [_c('div', {
+  return _c('Row', {
+    staticClass: "pe-header"
+  }, [_c('div', {
     staticClass: "layout-logo"
   }, [_c('Icon', {
     attrs: {
@@ -42851,6 +42922,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
   return _c('Menu', {
     attrs: {
       "active-name": _vm.activeName,
+      "theme": _vm.theme,
       "width": "auto",
       "open-names": _vm.openItems
     },
@@ -42858,24 +42930,32 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       "on-select": _vm.selectItem
     }
   }, [_vm._l((_vm.sideBarList), function(item) {
-    return [(item.subItem.length) ? _c('Submenu', {
+    return (item.show) ? [(item.subItem.length) ? _c('Submenu', {
       attrs: {
         "name": item.url
       }
     }, [_c('template', {
       slot: "title"
-    }, [_vm._v("\n                " + _vm._s(item.displayName) + "\n            ")]), _vm._v(" "), _vm._l((item.subItem), function(el) {
-      return _c('Menu-item', {
+    }, [(item.icon) ? _c('Icon', {
+      attrs: {
+        "type": item.icon
+      }
+    }) : _vm._e(), _vm._v("\n                " + _vm._s(item.displayName) + "\n            ")], 1), _vm._v(" "), _vm._l((item.subItem), function(el) {
+      return (el.show) ? _c('Menu-item', {
         key: el.url,
         attrs: {
           "name": el.url
         }
-      }, [_vm._v("\n                " + _vm._s(el.displayName) + "\n            ")])
+      }, [_vm._v("\n                " + _vm._s(el.displayName) + "\n            ")]) : _vm._e()
     })], 2) : _c('Menu-item', {
       attrs: {
         "name": item.url
       }
-    }, [_vm._v("\n            " + _vm._s(item.displayName) + "\n        ")])]
+    }, [(item.icon) ? _c('Icon', {
+      attrs: {
+        "type": item.icon
+      }
+    }) : _vm._e(), _vm._v("\n            " + _vm._s(item.displayName) + "\n        ")], 1)] : _vm._e()
   })], 2)
 }
 var staticRenderFns = []
@@ -42954,7 +43034,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "date-time"
   }, [_c('label', {
     staticClass: "label-text"
-  }, [_vm._v("开始时间")]), _vm._v(" "), _c('DatePicker', {
+  }, [_vm._v(_vm._s(_vm.startLabel))]), _vm._v(" "), _c('DatePicker', {
     staticClass: "pe-w200",
     attrs: {
       "type": "datetime",
@@ -42968,7 +43048,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     }
   }), _vm._v(" "), _c('label', {
     staticClass: "label-text"
-  }, [_vm._v("结束时间")]), _vm._v(" "), _c('DatePicker', {
+  }, [_vm._v(_vm._s(_vm.endLabel))]), _vm._v(" "), _c('DatePicker', {
     staticClass: "pe-w200",
     attrs: {
       "type": "datetime",
@@ -43073,6 +43153,7 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
     staticClass: "layout-menu-left"
   }, [_c('SideBar', {
     attrs: {
+      "theme": _vm.theme,
       "side-bar-list": _vm.sideBarList,
       "open-items": _vm.openItems
     }
@@ -43089,12 +43170,12 @@ var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._sel
       expression: "path"
     }
   }, _vm._l((_vm.paths), function(item) {
-    return _c('Breadcrumb-item', {
+    return (item) ? _c('Breadcrumb-item', {
       key: item.fullpath,
       attrs: {
         "href": item.fullpath
       }
-    }, [_vm._v(_vm._s(item.name))])
+    }, [_vm._v(_vm._s(item.name))]) : _vm._e()
   }))], 1), _vm._v(" "), _c('Row', {
     staticClass: "layout-content"
   }, [_vm._t("layout-content-main")], 2)], 1)], 1)

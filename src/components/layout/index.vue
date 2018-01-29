@@ -2,12 +2,12 @@
 <template>
 <Row>
     <Col class="layout-menu-left">
-    <SideBar :side-bar-list="sideBarList" :open-items="openItems"></SideBar>
+    <SideBar :theme="theme" :side-bar-list="sideBarList" :open-items="openItems"></SideBar>
     </Col>
     <Col class="layout-container">
     <Row class="layout-breadcrumb">
         <Breadcrumb v-model="path">
-            <Breadcrumb-item v-for="item in paths" :key="item.fullpath" :href="item.fullpath">{{item.name}}</Breadcrumb-item>
+            <Breadcrumb-item v-for="item in paths" v-if="item" :key="item.fullpath" :href="item.fullpath">{{item.name}}</Breadcrumb-item>
         </Breadcrumb>
     </Row>
     <Row class="layout-content">
@@ -52,8 +52,8 @@ export default {
                 let name = (URI_NAMES || {})[fullpath];
                 // 未自定义bread名称的情况
                 if (!name) {
-                    this.$router.push('/');
-                    return;
+                    name = item;
+                    fullpath = path;
                 }
                 return {
                     fullpath: fullpath,
@@ -71,6 +71,20 @@ export default {
         });
     },
 
+    watch: {
+        path(val) {
+            if (!val) {
+                return;
+            }
+            let paths = val.split('/');
+            let sub_path = G.fetchSubActivedName(paths.slice(1).join('/'));
+            if (sub_path) {
+                this.$router.push(sub_path);
+                return;
+            }
+        }
+    },
+
     methods: {
 
     }
@@ -80,6 +94,8 @@ export default {
 <style lang="scss" scoped="true" type="text/css">
 .layout-menu-left {
     position: fixed;
+    top: 50px;
+    left: 0;
     width: 200px;
     height: 100%;
     overflow-y: auto;
@@ -88,10 +104,10 @@ export default {
 }
 
 .layout-container {
-    position: fixed;
+    position: relative;
     width: 100%;
     height: 100%;
-    padding: 15px 15px 15px 215px;
+    padding: 65px 15px 15px 215px;
     overflow-y: auto;
     .layout-content {
         padding: 10px;
